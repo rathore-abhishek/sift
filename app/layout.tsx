@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
@@ -43,7 +44,16 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        <TanstackQueryProvider>{children}</TanstackQueryProvider>
+        <TanstackQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </TanstackQueryProvider>
       </body>
     </html>
   );
