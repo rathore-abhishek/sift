@@ -1,4 +1,5 @@
 import React from "react";
+
 import Image from "next/image";
 
 export const Logo: React.FC = () => {
@@ -12,7 +13,7 @@ export const Logo: React.FC = () => {
         alt="Sift's Logo"
         className="size-8"
       />
-      <figcaption className="text-2xl font font-medium tracking-wide text-shadow-sm text-shadow-white/20">
+      <figcaption className="font text-2xl font-medium tracking-wide text-shadow-sm text-shadow-white/20">
         Sift
       </figcaption>
     </figure>

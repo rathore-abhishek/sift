@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+
 import "./globals.css";
-import { cn } from "@/lib/utils";
+import { BProgressProvider } from "@/components/providers/bprogress-provider";
 import { TanstackQueryProvider } from "@/components/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { BProgressProvider } from "@/components/providers/bprogress-provider";
+import { cn } from "@/lib/utils";
 
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
@@ -40,11 +41,11 @@ export default function RootLayout({
         "antialiased",
         geistSans.className,
         geistMono.variable,
-        instrumentSerif.variable,
+        instrumentSerif.variable
       )}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
         <TanstackQueryProvider>
           <ThemeProvider
             attribute="class"
