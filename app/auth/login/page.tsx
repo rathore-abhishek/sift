@@ -53,13 +53,13 @@ const LoginPage = () => {
                     <InputGroupAddon align={"inline-start"}>
                       <HugeiconsIcon icon={Mail} />
                     </InputGroupAddon>
-                    <InputGroupInput />
+                    <InputGroupInput placeholder="Email" />
                   </InputGroup>
                   <InputGroup>
                     <InputGroupAddon align={"inline-start"}>
                       <HugeiconsIcon icon={Password} />
                     </InputGroupAddon>
-                    <InputGroupInput />
+                    <InputGroupInput placeholder="Password" />
                   </InputGroup>
                   <Button className={"w-full"}>Login</Button>
                   <Separator orientation="horizontal" />

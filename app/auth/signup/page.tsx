@@ -53,19 +53,19 @@ const SignUpPage = () => {
                     <InputGroupAddon align={"inline-start"}>
                       <HugeiconsIcon icon={User} />
                     </InputGroupAddon>
-                    <InputGroupInput />
+                    <InputGroupInput placeholder="Name" />
                   </InputGroup>
                   <InputGroup>
                     <InputGroupAddon align={"inline-start"}>
                       <HugeiconsIcon icon={Mail} />
                     </InputGroupAddon>
-                    <InputGroupInput />
+                    <InputGroupInput placeholder="Email" />
                   </InputGroup>
                   <InputGroup>
                     <InputGroupAddon align={"inline-start"}>
                       <HugeiconsIcon icon={Password} />
                     </InputGroupAddon>
-                    <InputGroupInput />
+                    <InputGroupInput placeholder="Password" />
                   </InputGroup>
                   <Button className={"w-full"}>SignUp</Button>
                   <Separator orientation="horizontal" />
