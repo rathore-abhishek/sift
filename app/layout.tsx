@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stitch",
+  title: "Sift",
 };
 
 export default function RootLayout({
@@ -42,6 +42,7 @@ export default function RootLayout({
         geistMono.variable,
         instrumentSerif.variable,
       )}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
         <TanstackQueryProvider>
