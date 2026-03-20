@@ -64,12 +64,12 @@ const LoginPage = () => {
                     Continue with Google
                   </Button>
                   <p className="text-muted-foreground text-center text-sm">
-                    Dont' have an account?{" "}
+                    Already have an account?{" "}
                     <Link
-                      href={"/auth/signup"}
+                      href={"/auth/login"}
                       className="text-primary hover:underline"
                     >
-                      Sign Up
+                      Login
                     </Link>
                   </p>
                 </div>
