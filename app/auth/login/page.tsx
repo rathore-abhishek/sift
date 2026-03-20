@@ -21,23 +21,23 @@ const LoginPage = () => {
         <Scale count={50} direction="left" />
         <Scale count={50} direction="right" />
       </div>{" "}
-      <div className="relative flex min-h-svh items-center justify-center overflow-clip">
+      <div className="relative flex min-h-svh items-center justify-center">
         <div className="relative flex min-h-svh w-full max-w-7xl flex-col items-center justify-center border-x">
           <div className="pointer-events-none absolute inset-y-0 w-full max-w-2xl">
             <div className="bg-border absolute inset-y-0 left-0 w-px" />
             <div className="bg-border absolute inset-y-0 right-0 w-px" />
           </div>
-          <div className="bg-border h-px w-full" />
-          <div className="bg-secondary/20 dark:bg-secondary w-full max-w-2xl">
-            <div className="border-border bg-card flex w-full max-w-2xl rounded-xl border-x p-10">
-              <div className="relative w-1/2">
+          <div className="bg-border hidden h-px w-full sm:block" />
+          <div className="sm:bg-secondary/20 sm:dark:bg-secondary w-full max-w-2xl bg-transparent px-5 sm:px-0">
+            <div className="border-border bg-card flex w-full max-w-2xl flex-col rounded-xl border-x p-10 sm:flex-row">
+              <div className="relative hidden w-1/2 sm:block">
                 <Logo />
                 <p className="text-neutral-500">
                   Sift - Talk to your files with ease.
                 </p>
                 <Folder />
               </div>
-              <div className="w-1/2 rounded-xl">
+              <div className="w-full rounded-xl sm:w-1/2">
                 <div className="text-center">
                   <h2 className="text-muted-foreground text-xl">
                     Welcome back!
@@ -76,7 +76,7 @@ const LoginPage = () => {
               </div>
             </div>
           </div>
-          <div className="bg-border h-px w-full" />
+          <div className="bg-border hidden h-px w-full sm:block" />
         </div>
       </div>
     </div>
