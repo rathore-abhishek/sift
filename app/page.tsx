@@ -1,5 +1,10 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
-  return <p>Hi I am abhishk and this is sift</p>;
+  return (
+    <div className="min-h-svh flex items-center justify-center">
+      <Button render={<Link href={"/auth/login"} />}>Login Page</Button>
+    </div>
+  );
 }

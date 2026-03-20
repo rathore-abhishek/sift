@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
+import { TanstackQueryProvider } from "@/components/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { BProgressProvider } from "@/components/providers/bprogress-provider";
 
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
@@ -50,7 +51,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <BProgressProvider>{children}</BProgressProvider>
           </ThemeProvider>
         </TanstackQueryProvider>
       </body>
