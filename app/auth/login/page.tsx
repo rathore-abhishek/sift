@@ -27,6 +27,10 @@ const LoginPage = () => {
             <div className="bg-border absolute inset-y-0 left-0 w-px" />
             <div className="bg-border absolute inset-y-0 right-0 w-px" />
           </div>
+          <div className="mb-2 flex flex-col items-center justify-center sm:hidden">
+            <Logo />
+            <p className="text-neutral-500">Talk to your files with ease.</p>
+          </div>
           <div className="bg-border hidden h-px w-full sm:block" />
           <div className="sm:bg-secondary/20 sm:dark:bg-secondary w-full max-w-2xl bg-transparent px-5 sm:px-0">
             <div className="border-border bg-card flex w-full max-w-2xl flex-col rounded-xl border-x p-10 sm:flex-row">

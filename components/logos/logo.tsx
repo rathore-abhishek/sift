@@ -1,8 +1,12 @@
 import React from "react";
 
-import Image from "next/image";
+import Image, { ImageProps } from "next/image";
 
-export const Logo: React.FC = () => {
+import { cn } from "@/lib/utils";
+
+type LogoProps = ImageProps;
+
+export const Logo: React.FC<LogoProps> = ({ className, ...props }) => {
   return (
     <figure className="inline-flex items-center gap-2">
       <Image
@@ -11,7 +15,7 @@ export const Logo: React.FC = () => {
         width={200}
         height={200}
         alt="Sift's Logo"
-        className="size-8"
+        className={cn("size-8", className)}
       />
       <figcaption className="font text-2xl font-medium tracking-wide text-shadow-sm text-shadow-white/20">
         Sift
