@@ -10,7 +10,6 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Separator } from "@/components/ui/separator";
 import { Mail, Password } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -62,7 +61,13 @@ const LoginPage = () => {
                     <InputGroupInput placeholder="Password" />
                   </InputGroup>
                   <Button className={"w-full"}>Login</Button>
-                  <Separator orientation="horizontal" />
+                  <div className="flex items-center">
+                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
+                    <span className="text-muted-foreground px-2 text-xs">
+                      OR
+                    </span>
+                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
+                  </div>{" "}
                   <Button variant={"secondary"} className={"w-full"}>
                     <Google />
                     Continue with Google
