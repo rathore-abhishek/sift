@@ -11,10 +11,10 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Password } from "@hugeicons/core-free-icons";
+import { Mail, Password, User } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   return (
     <div className="relative min-h-svh overflow-clip">
       <div className="relative mx-auto max-w-7xl">
@@ -47,6 +47,12 @@ const LoginPage = () => {
                 <div className="mt-4 w-full space-y-3">
                   <InputGroup>
                     <InputGroupAddon align={"inline-start"}>
+                      <HugeiconsIcon icon={User} />
+                    </InputGroupAddon>
+                    <InputGroupInput />
+                  </InputGroup>
+                  <InputGroup>
+                    <InputGroupAddon align={"inline-start"}>
                       <HugeiconsIcon icon={Mail} />
                     </InputGroupAddon>
                     <InputGroupInput />
@@ -57,7 +63,7 @@ const LoginPage = () => {
                     </InputGroupAddon>
                     <InputGroupInput />
                   </InputGroup>
-                  <Button className={"w-full"}>Login</Button>
+                  <Button className={"w-full"}>SignUp</Button>
                   <Separator orientation="horizontal" />
                   <Button variant={"secondary"} className={"w-full"}>
                     <Google />
@@ -83,4 +89,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
