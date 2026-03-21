@@ -80,33 +80,36 @@ const DashboardPage = () => {
             <div className="mt-6 flex flex-col gap-2">
               <NewNotebookListCard />
 
+              {/* Table wrapper */}
               <div className="border-border bg-accent/30 overflow-hidden rounded-xl border">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-border border-b">
-                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                        #
-                      </th>
-                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                        Name
-                      </th>
-                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                        Last updated
-                      </th>
-                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                        Sources
-                      </th>
-                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {notebooks.map((nb) => (
-                      <NotebookListRow key={nb.id} notebook={nb} />
-                    ))}
-                  </tbody>
-                </table>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[400px]">
+                    <thead>
+                      <tr className="border-border border-b">
+                        <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                          #
+                        </th>
+                        <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                          Name
+                        </th>
+                        <th className="text-muted-foreground hidden px-4 py-2 text-left text-xs font-medium md:table-cell">
+                          Last updated
+                        </th>
+                        <th className="text-muted-foreground hidden px-4 py-2 text-left text-xs font-medium sm:table-cell">
+                          Sources
+                        </th>
+                        <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {notebooks.map((nb) => (
+                        <NotebookListRow key={nb.id} notebook={nb} />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
