@@ -219,7 +219,7 @@ function NotebookFolder({ notebook }: { notebook: (typeof notebooks)[0] }) {
       {/* Three-dot menu */}
       <div className="absolute top-7 right-3 z-30">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
             <Button
               variant="ghost"
               size="icon"
@@ -248,9 +248,9 @@ function NotebookFolder({ notebook }: { notebook: (typeof notebooks)[0] }) {
 function NewNotebookCard({ view }: { view: "grid" | "list" }) {
   if (view === "list") {
     return (
-      <div className="group border-border bg-card/50 hover:border-primary/50 hover:bg-card flex cursor-pointer items-center gap-4 rounded-lg border border-dashed px-5 py-4 transition-all">
-        <div className="border-border bg-secondary group-hover:border-primary/50 group-hover:bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-lg border border-dashed transition-all">
-          <Plus className="text-muted-foreground group-hover:text-primary size-4 transition-colors" />
+      <div className="group border-border dark:border-accent hover:bg-accent dark:hover:bg-accent/20 flex cursor-pointer items-center gap-4 rounded-xl border border-dashed px-5 py-4 transition-all">
+        <div className="border-border dark:border-accent group-hover:border-foreground/30 group-hover:dark:border-foreground/30 flex size-9 shrink-0 items-center justify-center rounded-full border border-dashed transition-all">
+          <Plus className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
         </div>
         <span className="text-muted-foreground group-hover:text-foreground text-sm transition-colors">
           New notebook
@@ -259,14 +259,13 @@ function NewNotebookCard({ view }: { view: "grid" | "list" }) {
     );
   }
 
-  // Grid — match folder dimensions exactly
   return (
     <div
-      className="group border-border bg-card/40 hover:border-primary/40 hover:bg-card/80 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed transition-all"
+      className="group border-border dark:border-accent hover:bg-accent dark:hover:bg-accent/20 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed transition-all"
       style={{ width: W, height: H }}
     >
-      <div className="border-border bg-secondary group-hover:border-primary/50 group-hover:bg-primary/10 flex size-12 items-center justify-center rounded-full border border-dashed transition-all">
-        <Plus className="text-muted-foreground group-hover:text-primary size-5 transition-colors" />
+      <div className="border-border dark:border-accent group-hover:dark:border-foreground/30 group-hover:border-foreground/30 flex size-12 items-center justify-center rounded-full border border-dashed transition-all">
+        <Plus className="text-muted-foreground group-hover:text-foreground size-5 transition-colors" />
       </div>
       <span className="text-muted-foreground group-hover:text-foreground text-sm transition-colors">
         New notebook
