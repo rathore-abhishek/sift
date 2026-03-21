@@ -4,10 +4,10 @@ export const Footer = () => {
   return (
     <div className="w-full border-t">
       <footer className="bg-secondary/20 dark:bg-secondary mx-auto w-full max-w-7xl border-x">
-        <div className="bg-background flex w-full flex-1 flex-col items-center justify-between p-5 sm:flex-row">
+        <div className="bg-background flex w-full flex-1 flex-col items-center justify-between px-5 py-4 sm:flex-row">
           <p className="text-muted-foreground text-sm">2026 copyright.</p>
           <a
-            className="text-muted-foreground decoration-muted-foreground hover:decoration-foreground hover:text-foreground inline-flex items-center gap-1 font-medium transition-colors duration-200"
+            className="text-muted-foreground decoration-muted-foreground hover:decoration-foreground hover:text-foreground inline-flex items-center gap-1 text-sm font-medium transition-colors duration-200"
             href="https://abhishekz.vercel.app"
             target="_blank"
           >
