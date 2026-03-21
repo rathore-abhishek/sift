@@ -169,7 +169,7 @@ export const NotebookFolderCard = ({
             <div className="bg-accent absolute inset-0" />
             <div
               className={cn(
-                "absolute top-0 left-0 h-[21px] w-[118px] opacity-60",
+                "absolute top-0 left-0 h-5.25 w-29.5 opacity-60",
                 notebook.tabColor
               )}
             />
@@ -302,11 +302,11 @@ function MiniFolderIcon({
           />
           <div
             className={cn(
-              "absolute top-0 left-0 h-[4px] w-[18px] opacity-50",
+              "absolute top-0 left-0 h-1 w-4.5 opacity-50",
               notebook.tabColor
             )}
           />
-          <div className="bg-border absolute inset-x-0 top-[4px] h-px" />
+          <div className="bg-border absolute inset-x-0 top-1 h-px" />
         </div>
       </motion.div>
     </div>
