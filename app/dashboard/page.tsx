@@ -35,10 +35,10 @@ import { motion } from "motion/react";
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const CLIP =
-  "M 0 15 Q 0 0 15 0 L 81 0 C 97 0 100 21 118 21 L 285 21 Q 300 21 300 37 L 300 188 Q 300 200 285 200 L 15 200 Q 0 200 0 185 Z";
+  "M 0 15 Q 0 0 15 0 L 81 0 C 97 0 100 21 118 21 L 265 21 Q 280 21 280 37 L 280 178 Q 280 190 265 190 L 15 190 Q 0 190 0 175 Z";
 
-const W = 300;
-const H = 200;
+const W = 280;
+const H = 190;
 
 const CLOSED_STACK = [
   { y: -28, scale: 0.88, rotate: -5 },
@@ -69,9 +69,9 @@ const innerCards = [
 
 const sortOptions = [
   { label: "Most Recent", value: "most-recent" },
-  { label: "Old First", value: "most-recent" },
-  { label: "A to Z", value: "most-recent" },
-  { label: "Z to A", value: "most-recent" },
+  { label: "Old First", value: "old-first" },
+  { label: "A to Z", value: "a-to-z" },
+  { label: "Z to A", value: "z-to-a" },
 ];
 
 const notebooks = [
@@ -261,7 +261,7 @@ function NewNotebookCard({ view }: { view: "grid" | "list" }) {
 
   return (
     <div
-      className="group border-border dark:border-accent hover:bg-accent dark:hover:bg-accent/20 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed transition-all"
+      className="group border-border bg-muted/20 dark:border-accent hover:bg-accent dark:hover:bg-accent/20 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed transition-all"
       style={{ width: W, height: H }}
     >
       <div className="border-border dark:border-accent group-hover:dark:border-foreground/30 group-hover:border-foreground/30 flex size-12 items-center justify-center rounded-full border border-dashed transition-all">
@@ -460,11 +460,11 @@ const DashboardPage = () => {
               </div>
 
               {/* Sort */}
-              <Select items={sortOptions}>
+              <Select items={sortOptions} defaultValue={"most-recent"}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent align="end" alignItemWithTrigger>
+                <SelectContent align="end" alignItemWithTrigger={false}>
                   {sortOptions.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
@@ -483,7 +483,7 @@ const DashboardPage = () => {
 
           {/* ── Content ── */}
           {view === "grid" ? (
-            <div className="mt-6 flex flex-wrap gap-5">
+            <div className="mt-6 grid grid-cols-4 gap-5">
               <NewNotebookCard view="grid" />
               {notebooks.map((nb) => (
                 <NotebookFolder key={nb.id} notebook={nb} />
