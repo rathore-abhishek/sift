@@ -25,7 +25,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sift",
+  title: "Sift - Talk to your files with ease.",
 };
 
 export default function RootLayout({
@@ -45,7 +45,7 @@ export default function RootLayout({
       )}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <TanstackQueryProvider>
           <ThemeProvider
             attribute="class"
