@@ -30,7 +30,7 @@ const sortOptions = [
 
 export const Toolbar: React.FC<ToolbarProps> = ({ setView, view }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col justify-between sm:flex-row sm:items-center">
       <h1 className="text-2xl font-semibold tracking-tight">Notebooks</h1>
 
       <div className="flex items-center gap-2">
