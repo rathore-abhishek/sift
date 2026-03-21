@@ -23,6 +23,8 @@
   },
   "registries": {
     "@tailark-pro": "https://pro.tailark.com/registry/{name}",
-    "@magicui": "https://magicui.design/r/{name}"
+    "@magicui": "https://magicui.design/r/{name}",
+    "@shadcnblocks": "https://shadcnblocks.com/r/{name}.json",
+    "@diceui": "https://diceui.com/r/{name}.json"
   }
 }

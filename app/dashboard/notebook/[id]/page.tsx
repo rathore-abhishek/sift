@@ -2,7 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Navbar } from "./_components/navbar";
+import Example from "@/components/file-upload-dropzone-1";
 import { Button } from "@/components/ui/button";
+import { FileUpload, FileUploadDropzone } from "@/components/ui/file-upload";
 import { Input } from "@/components/ui/input";
 import {
   InputGroup,
@@ -64,10 +66,9 @@ const NotebookPage = () => {
         <motion.div
           animate={{
             width: isLeftOpen ? "25%" : "fit-content",
-            // opacity: isLeftOpen ? 1 : 0,
           }}
           transition={isLeftOpen ? panelTransition : closedPanelTransition}
-          className="bg-card overflow-hidden rounded-xl border-x dark:border-neutral-700"
+          className="bg-card flex flex-col overflow-hidden rounded-xl border-x dark:border-neutral-700"
           style={{ flexShrink: 0 }}
         >
           <div className="flex items-center border-b px-5 py-4 dark:border-neutral-700">
@@ -94,6 +95,9 @@ const NotebookPage = () => {
                 className="text-muted-foreground my-0.5 size-5"
               />
             </button>
+          </div>
+          <div className="mt-3 flex w-full items-center justify-center">
+            <Example />
           </div>
         </motion.div>
 
