@@ -83,7 +83,7 @@ const DashboardPage = () => {
               {/* Table wrapper */}
               <div className="border-border bg-accent/30 overflow-hidden rounded-xl border">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px]">
+                  <table className="w-full min-w-80">
                     <thead>
                       <tr className="border-border border-b">
                         <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
