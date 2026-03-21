@@ -28,6 +28,7 @@ import {
   Trash2,
   Pencil,
   Paperclip,
+  Trash,
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -274,47 +275,145 @@ function NewNotebookCard({ view }: { view: "grid" | "list" }) {
   );
 }
 
-// ─── List Row ─────────────────────────────────────────────────────────────────
+const MINI_CLIP =
+  "M 0 3 Q 0 0 3 0 L 12 0 C 15 0 16 4 18 4 L 28 4 Q 30 4 30 6 L 30 19 Q 30 20 28 20 L 2 20 Q 0 20 0 18 Z";
+
+const MINI_W = 30;
+const MINI_H = 20;
+
+function MiniFolderIcon({
+  notebook,
+  isOpen,
+}: {
+  notebook: (typeof notebooks)[0];
+  isOpen: boolean;
+}) {
+  const clipId = `mini-folder-clip-${notebook.id}`;
+
+  return (
+    <div
+      className="relative shrink-0"
+      style={{ width: MINI_W, height: MINI_H, perspective: "300px" }}
+    >
+      <svg className="pointer-events-none absolute h-0 w-0" aria-hidden="true">
+        <defs>
+          <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
+            <path d={MINI_CLIP} />
+          </clipPath>
+        </defs>
+      </svg>
+
+      {/* Back plate */}
+      <motion.div
+        className={cn(
+          "border-border absolute inset-x-0 top-0 mt-0.5 rounded-md border",
+          notebook.tabColor
+        )}
+        style={{ height: "88%" }}
+        animate={{ opacity: isOpen ? 0.15 : 0.08 }}
+        transition={{ duration: 0.2 }}
+      />
+
+      {/* File cards */}
+      <div className="pointer-events-none absolute inset-x-1 bottom-0.5 z-10 flex h-[78%] items-end">
+        {[
+          { rotate: -4, delay: 0 },
+          { rotate: 1, delay: 0.04 },
+          { rotate: -1, delay: 0.08 },
+        ].map((file, i) => (
+          <motion.div
+            key={i}
+            className={cn(
+              "absolute w-full origin-bottom rounded-sm",
+              notebook.tabColor
+            )}
+            style={{ height: "80%", zIndex: i + 1 }}
+            animate={{
+              y: isOpen ? -2 - i * 3 : 0,
+              opacity: isOpen ? 0.25 - i * 0.02 : 0,
+            }}
+            transition={{
+              duration: 0.35,
+              ease: [0.2, 0.8, 0.2, 1],
+              delay: file.delay,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Folder face */}
+      <motion.div
+        className="absolute inset-0 z-20"
+        style={{
+          transformOrigin: "bottom center",
+          transformStyle: "preserve-3d",
+        }}
+        animate={{ rotateX: isOpen ? -18 : 0 }}
+        transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+      >
+        <div
+          className="absolute inset-0 h-full w-full"
+          style={{ clipPath: `url(#${clipId})` }}
+        >
+          <div
+            className={cn("absolute inset-0", notebook.tabColor, "opacity-20")}
+          />
+          <div
+            className={cn(
+              "absolute top-0 left-0 h-[7px] w-[40px] opacity-50",
+              notebook.tabColor
+            )}
+          />
+          <div className="bg-border absolute inset-x-0 top-[7px] h-px" />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 function NotebookListRow({ notebook }: { notebook: (typeof notebooks)[0] }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="group border-border bg-card hover:bg-card/80 flex cursor-pointer items-center gap-4 rounded-lg border px-5 py-4 transition-all">
-      <div
-        className={cn(
-          "flex size-9 shrink-0 items-center justify-center rounded-lg",
-          notebook.tabColor,
-          "bg-opacity-20"
-        )}
-      >
-        <FileText className="text-foreground/70 size-4" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{notebook.title}</p>
-        <p className="text-muted-foreground text-xs">
-          {notebook.updatedAt} · {notebook.sources} sources
-        </p>
-      </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:opacity-100"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <MoreHorizontal className="size-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>
-            <Pencil className="mr-2 size-3.5" /> Rename
-          </DropdownMenuItem>
-          <DropdownMenuItem className="text-destructive">
-            <Trash2 className="mr-2 size-3.5" /> Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    <tr
+      className="group border-border hover:bg-accent/50 cursor-pointer border-b transition-colors last:border-b-0"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <td className="px-4 py-3">
+        <MiniFolderIcon notebook={notebook} isOpen={isOpen} />
+      </td>
+      <td className="px-4 py-3">
+        <p className="text-sm font-semibold">{notebook.title}</p>
+      </td>
+      <td className="px-4 py-3">
+        <p className="text-muted-foreground text-xs">{notebook.updatedAt}</p>
+      </td>
+      <td className="px-4 py-3">
+        <div className="flex items-center gap-1.5">
+          <Paperclip className="text-muted-foreground size-3 shrink-0" />
+          <span className="text-muted-foreground text-xs tabular-nums">
+            {notebook.sources} sources
+          </span>
+        </div>
+      </td>
+      <td className="space-x-2 px-4 py-3">
+        <Button
+          variant="outline"
+          size={"icon-xs"}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Pencil />
+        </Button>
+        <Button
+          variant="destructive"
+          size={"icon-xs"}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Trash />
+        </Button>
+      </td>
+    </tr>
   );
 }
 
@@ -393,10 +492,36 @@ const DashboardPage = () => {
             </div>
           ) : (
             <div className="mt-6 flex flex-col gap-2">
-              {/*<NewNotebookCard view="list" />
-              {notebooks.map((nb) => (
-                <NotebookListRow key={nb.id} notebook={nb} />
-              ))}*/}
+              <NewNotebookCard view="list" />
+
+              <div className="border-border bg-accent/30 overflow-hidden rounded-xl border">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-border border-b">
+                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                        #
+                      </th>
+                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                        Name
+                      </th>
+                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                        Last updated
+                      </th>
+                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                        Sources
+                      </th>
+                      <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {notebooks.map((nb) => (
+                      <NotebookListRow key={nb.id} notebook={nb} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
