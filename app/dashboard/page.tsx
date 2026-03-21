@@ -119,14 +119,16 @@ const notebooks = [
 // ─── Notebook Folder Card ─────────────────────────────────────────────────────
 
 function NotebookFolder({ notebook }: { notebook: (typeof notebooks)[0] }) {
+  const [isOpen, setIsOpen] = useState(false);
   const clipId = `folder-clip-${notebook.id}`;
 
   return (
     <div
       className="group relative cursor-pointer"
-      style={{ width: W, height: H }}
+      style={{ width: W, height: H, perspective: "600px" }}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
     >
-      {/* Per-folder SVG clip */}
       <svg className="pointer-events-none absolute h-0 w-0" aria-hidden="true">
         <defs>
           <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
@@ -135,38 +137,86 @@ function NotebookFolder({ notebook }: { notebook: (typeof notebooks)[0] }) {
         </defs>
       </svg>
 
-      {/* Folder shape */}
-      <div
-        className="bg-secondary border-border absolute inset-0 border transition-colors"
-        style={{ clipPath: `url(#${clipId})` }}
-      >
-        {/* Tab accent line */}
-        <div
-          className={cn(
-            "absolute top-0 left-0 h-[21px] w-[118px] opacity-60",
-            notebook.tabColor
-          )}
-        />
+      {/* Back plate — revealed as folder opens */}
+      <motion.div
+        className={cn(
+          "border-border bg-secondary/10 dark:bg-secondary/40 absolute inset-x-0 top-0 mt-2 rounded-xl border"
+        )}
+        style={{ height: "90%" }}
+        animate={{ opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
+      />
 
-        {/* Divider below tab */}
-        <div className="bg-border absolute inset-x-0 top-[21px] h-px" />
-
-        {/* Content */}
-        <div className="absolute inset-0 flex flex-col justify-end p-4 pt-10">
-          <p className="line-clamp-2 text-sm leading-snug font-semibold">
-            {notebook.title}
-          </p>
-          <div className="mt-2 flex items-center gap-1.5">
-            <Paperclip className="text-muted-foreground size-3 shrink-0" />
-            <span className="text-muted-foreground text-xs">
-              {notebook.sources} sources · {notebook.updatedAt}
-            </span>
-          </div>
-        </div>
+      {/* Stacked white file cards — slide up on hover */}
+      <div className="pointer-events-none absolute inset-x-4 bottom-3 z-10 flex h-[80%] items-end">
+        {[
+          { rotate: -4, delay: 0 },
+          { rotate: 1, delay: 0.04 },
+          { rotate: -1, delay: 0.08 },
+        ].map((file, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-full origin-bottom rounded-md bg-black/20 shadow-sm dark:bg-white/15"
+            style={{
+              height: "85%",
+              zIndex: i + 1,
+              rotate: file.rotate,
+            }}
+            animate={{
+              y: isOpen ? -42 - i * 10 : 0,
+              opacity: isOpen ? 0.5 - i * 0.1 : 0,
+            }}
+            transition={{
+              duration: 0.35,
+              ease: [0.2, 0.8, 0.2, 1],
+              delay: file.delay,
+            }}
+          />
+        ))}
       </div>
 
+      {/* Folder face — tilts open */}
+      <motion.div
+        className="absolute inset-0 z-20"
+        style={{
+          transformOrigin: "bottom center",
+          transformStyle: "preserve-3d",
+        }}
+        animate={{ rotateX: isOpen ? -18 : 0 }}
+        transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+      >
+        <div
+          className="absolute inset-0 h-full w-full border"
+          style={{ clipPath: `url(#${clipId})` }}
+        >
+          {/* Face bg */}
+          <div className={cn("bg-accent absolute inset-0")} />
+
+          {/* Tab accent */}
+          <div
+            className={cn(
+              "absolute top-0 left-0 h-[21px] w-[118px] opacity-60",
+              notebook.tabColor
+            )}
+          />
+
+          {/* Content */}
+          <div className="absolute inset-0 flex flex-col justify-end p-4 pt-10">
+            <p className="line-clamp-2 text-sm leading-snug font-semibold">
+              {notebook.title}
+            </p>
+            <div className="mt-2 flex items-center gap-1.5">
+              <Paperclip className="text-muted-foreground size-3 shrink-0" />
+              <span className="text-muted-foreground text-xs">
+                {notebook.sources} sources · {notebook.updatedAt}
+              </span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {/* Three-dot menu */}
-      <div className="absolute top-7 right-3 z-10">
+      <div className="absolute top-7 right-3 z-30">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
