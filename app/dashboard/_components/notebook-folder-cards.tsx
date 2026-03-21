@@ -173,16 +173,18 @@ export const NotebookFolderCard = ({
       {/* Three-dot menu */}
       <div className="absolute top-7 right-3 z-30">
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-7 opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:opacity-100"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <HugeiconsIcon icon={MoreHorizontal} className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7 opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:opacity-100"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <HugeiconsIcon icon={MoreHorizontal} />
+              </Button>
+            }
+          />
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <HugeiconsIcon
