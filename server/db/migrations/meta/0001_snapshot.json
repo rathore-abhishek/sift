@@ -1,6 +1,6 @@
 {
-  "id": "c92f2e79-36ae-404f-969e-3edae8d2d4ab",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "181b325c-c63f-436c-be30-65c7200f6621",
+  "prevId": "c92f2e79-36ae-404f-969e-3edae8d2d4ab",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -32,12 +32,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
-        },
-        "username": {
-          "name": "username",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         },
         "image": {
           "name": "image",
@@ -75,21 +69,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "user_username_idx": {
-          "name": "user_username_idx",
-          "columns": [
-            {
-              "expression": "lower(\"username\")",
-              "asc": true,
-              "isExpression": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {},
@@ -98,12 +77,9 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
-        },
-        "user_username_unique": {
-          "name": "user_username_unique",
-          "nullsNotDistinct": false,
-          "columns": ["username"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},
@@ -216,8 +192,12 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -304,8 +284,12 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -315,7 +299,9 @@
         "session_token_unique": {
           "name": "session_token_unique",
           "nullsNotDistinct": false,
-          "columns": ["token"]
+          "columns": [
+            "token"
+          ]
         }
       },
       "policies": {},

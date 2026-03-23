@@ -15,16 +15,13 @@ import { orpc } from "@/lib/orpc/client";
 // import { authClient } from "@/server/better-auth/client";
 import { Mail, Password } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { createAuthClient } from "better-auth/react";
 
 const LoginPage = () => {
-  // const res = orpc.auth.signInSocial.call();
-  //
-  //
-  //
-  //
+  const authClient = createAuthClient();
 
   function handleGoogleLogin() {
-    const res = orpc.auth.signInSocial.call();
+    const res = authClient.signIn.social({ provider: "google" });
   }
 
   return (

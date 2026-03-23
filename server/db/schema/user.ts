@@ -16,7 +16,6 @@ export const user = pgTable(
     name: text("name").notNull(),
     email: text("email").notNull().unique(),
     emailVerified: boolean("email_verified").default(false).notNull(),
-    username: text("username").notNull().unique(),
     image: text("image"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
@@ -24,10 +23,7 @@ export const user = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [
-    uniqueIndex("user_email_idx").on(lower(table.email)),
-    uniqueIndex("user_username_idx").on(lower(table.username)),
-  ]
+  (table) => [uniqueIndex("user_email_idx").on(lower(table.email))]
 );
 
 export const userRelations = relations(user, ({ many }) => ({

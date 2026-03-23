@@ -2,12 +2,6 @@ import { auth } from "../better-auth";
 import { base } from "./base";
 import { z } from "zod";
 
-export const signInSocial = base.handler(async () => {
-  const data = await auth.api.signInSocial({ body: { provider: "google" } });
-
-  console.log(data);
-});
-
 export const signIn = base
   .input(
     z.object({

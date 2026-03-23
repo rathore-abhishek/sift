@@ -8,6 +8,13 @@
       "when": 1774252323967,
       "tag": "0000_auth",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1774256722759,
+      "tag": "0001_remove_username",
+      "breakpoints": true
     }
   ]
 }
