@@ -12,11 +12,15 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useProgress } from "@bprogress/next";
 import { Mail, Password } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 const LoginPage = () => {
+  const { start } = useProgress();
+
   function handleGoogleLogin() {
+    start();
     authClient.signIn.social({ provider: "google" });
   }
 

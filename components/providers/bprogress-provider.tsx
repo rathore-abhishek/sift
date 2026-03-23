@@ -13,6 +13,7 @@ export const BProgressProvider: React.FC<BProgressProvider> = ({
       color="var(--color-primary)"
       height="2px"
       options={{ showSpinner: false }}
+      shallowRouting
     >
       {children}
     </ProgressProvider>

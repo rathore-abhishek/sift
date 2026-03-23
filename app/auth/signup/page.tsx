@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
 
+import { authClient } from "@/client/better-auth";
 import Folder from "@/components/folder";
 import { Google } from "@/components/icons/google";
 import { Logo } from "@/components/logos/logo";
@@ -10,10 +12,18 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useProgress } from "@bprogress/next";
 import { Mail, Password, User } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 const SignUpPage = () => {
+  const { start } = useProgress();
+
+  function handleGoogleLogin() {
+    start();
+    authClient.signIn.social({ provider: "google" });
+  }
+
   return (
     <div className="relative min-h-svh overflow-clip">
       <div className="relative mx-auto max-w-7xl">
@@ -74,7 +84,11 @@ const SignUpPage = () => {
                     </span>
                     <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
                   </div>
-                  <Button variant={"secondary"} className={"w-full"}>
+                  <Button
+                    variant={"secondary"}
+                    className={"w-full"}
+                    onClick={handleGoogleLogin}
+                  >
                     <Google />
                     Continue with Google
                   </Button>
