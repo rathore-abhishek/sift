@@ -1,9 +1,11 @@
 "use client";
+
 import { useState } from "react";
 
 import Link from "next/link";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
+import { SignupInput, signupSchema } from "./validation";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
 import Scale from "@/components/scale";
@@ -13,19 +15,52 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { useProgress } from "@bprogress/next";
-import { Mail, Password, User, Eye, EyeOff } from "@hugeicons/core-free-icons";
+import {
+  Mail,
+  Password,
+  User,
+  Eye,
+  EyeOff,
+  Tick,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useForm } from "@tanstack/react-form";
+
+// password rule definitions
+const passwordRules = [
+  { label: "Min 8 characters", test: (v: string) => v.length >= 8 },
+  {
+    label: "At least 1 uppercase letter",
+    test: (v: string) => /[A-Z]/.test(v),
+  },
+  {
+    label: "At least 1 lowercase letter",
+    test: (v: string) => /[a-z]/.test(v),
+  },
+  { label: "At least 1 number", test: (v: string) => /[0-9]/.test(v) },
+  {
+    label: "At least 1 special character",
+    test: (v: string) => /[^A-Za-z0-9]/.test(v),
+  },
+];
 
 const SignUpPage = () => {
-  const [show, setShow] = useState();
+  const [show, setShow] = useState(false);
+
+  const form = useForm({
+    defaultValues: { name: "", email: "", password: "" } as SignupInput,
+    validators: { onSubmit: signupSchema },
+    onSubmit: async ({ value }) => {
+      console.log(value);
+    },
+  });
 
   return (
     <div className="relative min-h-svh overflow-clip">
       <div className="relative mx-auto max-w-7xl">
         <Scale count={50} direction="left" />
         <Scale count={50} direction="right" />
-      </div>{" "}
+      </div>
       <div className="relative flex min-h-svh items-center justify-center overflow-clip">
         <div className="relative flex min-h-svh w-full max-w-7xl flex-col items-center justify-center border-x">
           <div className="pointer-events-none absolute inset-y-0 w-full max-w-2xl">
@@ -49,49 +84,140 @@ const SignUpPage = () => {
               <div className="w-full rounded-xl sm:w-1/2">
                 <div className="text-center">
                   <h2 className="text-muted-foreground text-xl">
-                    Welcome back!
+                    Get started!
                   </h2>
-                  <p className="text-2xl">Login to your account.</p>
+                  <p className="text-2xl">Create your account.</p>
                 </div>
                 <div className="mt-4 w-full space-y-3">
-                  <InputGroup>
-                    <InputGroupAddon align={"inline-start"}>
-                      <HugeiconsIcon icon={User} />
-                    </InputGroupAddon>
-                    <InputGroupInput placeholder="Name" />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputGroupAddon align={"inline-start"}>
-                      <HugeiconsIcon icon={Mail} />
-                    </InputGroupAddon>
-                    <InputGroupInput placeholder="Email" />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputGroupAddon align={"inline-start"}>
-                      <HugeiconsIcon icon={Password} />
-                    </InputGroupAddon>
-                    <InputGroupAddon
-                      className="cursor-pointer transition-colors duration-200 hover:text-white"
-                      align="inline-end"
-                      onClick={() => setShow(!show)}
-                    >
-                      <HugeiconsIcon icon={show ? Eye : EyeOff} />
-                    </InputGroupAddon>
-                    <InputGroupInput placeholder="Password" />
-                  </InputGroup>
-                  <Button className={"w-full"}>SignUp</Button>
+                  {/* Name Field */}
+                  <form.Field name="name">
+                    {(field) => (
+                      <div>
+                        <InputGroup>
+                          <InputGroupAddon align="inline-start">
+                            <HugeiconsIcon icon={User} />
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            placeholder="Name"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                          />
+                        </InputGroup>
+                        {field.state.meta.isTouched &&
+                          field.state.meta.errors[0] && (
+                            <p className="text-destructive mt-1 text-sm">
+                              {field.state.meta.errors[0].message}
+                            </p>
+                          )}
+                      </div>
+                    )}
+                  </form.Field>
+
+                  {/* Email Field */}
+                  <form.Field name="email">
+                    {(field) => (
+                      <div>
+                        <InputGroup>
+                          <InputGroupAddon align="inline-start">
+                            <HugeiconsIcon icon={Mail} />
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            placeholder="Email"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                          />
+                        </InputGroup>
+                        {field.state.meta.isTouched &&
+                          field.state.meta.errors[0] && (
+                            <p className="text-destructive mt-1 text-sm">
+                              {field.state.meta.errors[0].message}
+                            </p>
+                          )}
+                      </div>
+                    )}
+                  </form.Field>
+
+                  {/* Password Field */}
+                  <form.Field name="password">
+                    {(field) => (
+                      <div>
+                        <InputGroup>
+                          <InputGroupAddon align="inline-start">
+                            <HugeiconsIcon icon={Password} />
+                          </InputGroupAddon>
+                          <InputGroupAddon
+                            className="cursor-pointer transition-colors duration-200 hover:text-white"
+                            align="inline-end"
+                            onClick={() => setShow(!show)}
+                          >
+                            <HugeiconsIcon icon={show ? Eye : EyeOff} />
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            placeholder="Password"
+                            type={show ? "text" : "password"}
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                          />
+                        </InputGroup>
+
+                        {/* Password rule indicators */}
+                        <ul className="mt-2 flex flex-col gap-0.5">
+                          {passwordRules.map((rule) => {
+                            const passed = rule.test(field.state.value);
+                            return (
+                              <li
+                                key={rule.label}
+                                className="flex w-full items-center justify-between"
+                              >
+                                <p
+                                  className={`text-xs transition-colors duration-200 ${
+                                    !passed && field.state.meta.isTouched
+                                      ? "text-destructive"
+                                      : "text-muted-foreground"
+                                  }`}
+                                >
+                                  {rule.label}
+                                </p>
+                                <HugeiconsIcon
+                                  icon={Tick}
+                                  className={`size-4 transition-colors duration-200 ${
+                                    passed
+                                      ? "text-lime-500"
+                                      : "text-muted-foreground"
+                                  }`}
+                                />
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                  </form.Field>
+
+                  <Button
+                    className="w-full"
+                    onClick={() => form.handleSubmit()}
+                  >
+                    Sign Up
+                  </Button>
+
                   <div className="flex items-center">
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
+                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
                     <span className="text-muted-foreground px-2 text-xs">
                       OR
                     </span>
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
+                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
                   </div>
+
                   <GoogleLoginButton />
+
                   <p className="text-muted-foreground text-center text-sm">
                     Already have an account?{" "}
                     <Link
-                      href={"/auth/login"}
+                      href="/auth/login"
                       className="text-primary hover:underline"
                     >
                       Login
