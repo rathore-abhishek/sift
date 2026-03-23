@@ -1,7 +1,10 @@
 "use client";
+import { useState } from "react";
+
 import Link from "next/link";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
+import { LoginInput, loginSchema } from "./validation";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
 import Scale from "@/components/scale";
@@ -9,18 +12,31 @@ import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Mail, Password } from "@hugeicons/core-free-icons";
+import { Eye, Mail, Password, EyeOff } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useForm } from "@tanstack/react-form";
 
 const LoginPage = () => {
+  const [show, setShow] = useState();
+  const form = useForm({
+    defaultValues: { email: "", password: "" } as LoginInput,
+    validators: {
+      onSubmit: loginSchema,
+    },
+    onSubmit: async ({ value }) => {
+      console.log(value);
+    },
+  });
+
   return (
     <div className="relative min-h-svh overflow-clip">
       <div className="relative mx-auto max-w-7xl">
         <Scale count={50} direction="left" />
         <Scale count={50} direction="right" />
-      </div>{" "}
+      </div>
       <div className="relative flex min-h-svh items-center justify-center">
         <div className="relative flex min-h-svh w-full max-w-7xl flex-col items-center justify-center border-x">
           <div className="pointer-events-none absolute inset-y-0 w-full max-w-2xl">
@@ -49,31 +65,84 @@ const LoginPage = () => {
                   <p className="text-2xl">Login to your account.</p>
                 </div>
                 <div className="mt-4 w-full space-y-3">
-                  <InputGroup>
-                    <InputGroupAddon align={"inline-start"}>
-                      <HugeiconsIcon icon={Mail} />
-                    </InputGroupAddon>
-                    <InputGroupInput placeholder="Email" />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputGroupAddon align={"inline-start"}>
-                      <HugeiconsIcon icon={Password} />
-                    </InputGroupAddon>
-                    <InputGroupInput placeholder="Password" />
-                  </InputGroup>
-                  <Button className={"w-full"}>Login</Button>
+                  {/* Email Field */}
+                  <form.Field name="email">
+                    {(field) => (
+                      <div>
+                        <InputGroup>
+                          <InputGroupAddon align="inline-start">
+                            <HugeiconsIcon icon={Mail} />
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            placeholder="Email"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                          />
+                        </InputGroup>
+                        {field.state.meta.errors[0] && (
+                          <p className="text-destructive mt-1 text-sm">
+                            {field.state.meta.errors[0].message}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </form.Field>
+
+                  {/* Password Field */}
+                  <form.Field name="password">
+                    {(field) => (
+                      <div>
+                        <InputGroup>
+                          <InputGroupAddon align="inline-start">
+                            <HugeiconsIcon icon={Password} />
+                          </InputGroupAddon>
+
+                          <InputGroupAddon
+                            className="cursor-pointer transition-colors duration-200 hover:text-white"
+                            align="inline-end"
+                            onClick={() => setShow(!show)}
+                          >
+                            <HugeiconsIcon icon={show ? Eye : EyeOff} />
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            placeholder="Password"
+                            type="password"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                          />
+                        </InputGroup>
+                        {field.state.meta.errors[0] && (
+                          <p className="text-destructive mt-1 text-sm">
+                            {field.state.meta.errors[0].message}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </form.Field>
+
+                  <Button
+                    className="w-full"
+                    onClick={() => form.handleSubmit()}
+                  >
+                    Login
+                  </Button>
+
                   <div className="flex items-center">
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
+                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
                     <span className="text-muted-foreground px-2 text-xs">
                       OR
                     </span>
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
-                  </div>{" "}
+                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
+                  </div>
+
                   <GoogleLoginButton />
+
                   <p className="text-muted-foreground text-center text-sm">
-                    Dont' have an account?{" "}
+                    Don't have an account?{" "}
                     <Link
-                      href={"/auth/signup"}
+                      href="/auth/signup"
                       className="text-primary hover:underline"
                     >
                       Sign Up

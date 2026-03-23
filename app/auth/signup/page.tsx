@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+
 import Link from "next/link";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
@@ -12,10 +14,12 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { useProgress } from "@bprogress/next";
-import { Mail, Password, User } from "@hugeicons/core-free-icons";
+import { Mail, Password, User, Eye, EyeOff } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 const SignUpPage = () => {
+  const [show, setShow] = useState();
+
   return (
     <div className="relative min-h-svh overflow-clip">
       <div className="relative mx-auto max-w-7xl">
@@ -65,6 +69,13 @@ const SignUpPage = () => {
                   <InputGroup>
                     <InputGroupAddon align={"inline-start"}>
                       <HugeiconsIcon icon={Password} />
+                    </InputGroupAddon>
+                    <InputGroupAddon
+                      className="cursor-pointer transition-colors duration-200 hover:text-white"
+                      align="inline-end"
+                      onClick={() => setShow(!show)}
+                    >
+                      <HugeiconsIcon icon={show ? Eye : EyeOff} />
                     </InputGroupAddon>
                     <InputGroupInput placeholder="Password" />
                   </InputGroup>

@@ -44,6 +44,9 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@tanstack/eslint-plugin-query": "^5.91.5",
+    "@tanstack/react-devtools": "^0.10.0",
+    "@tanstack/react-form-devtools": "^0.2.19",
+    "@tanstack/react-query-devtools": "^5.95.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/node": "^20",
     "@types/react": "^19",
