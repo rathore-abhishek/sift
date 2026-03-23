@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 
+import { authClient } from "@/client/better-auth";
 import Folder from "@/components/folder";
 import { Google } from "@/components/icons/google";
 import { Logo } from "@/components/logos/logo";
@@ -11,17 +12,12 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { orpc } from "@/lib/orpc/client";
-// import { authClient } from "@/server/better-auth/client";
 import { Mail, Password } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { createAuthClient } from "better-auth/react";
 
 const LoginPage = () => {
-  const authClient = createAuthClient();
-
   function handleGoogleLogin() {
-    const res = authClient.signIn.social({ provider: "google" });
+    authClient.signIn.social({ provider: "google" });
   }
 
   return (

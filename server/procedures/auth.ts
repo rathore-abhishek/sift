@@ -1,5 +1,5 @@
-import { auth } from "../better-auth";
 import { base } from "./base";
+import { auth } from "@/server/better-auth";
 import { z } from "zod";
 
 export const signIn = base
