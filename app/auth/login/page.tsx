@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 import Folder from "@/components/folder";
@@ -10,10 +11,22 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { orpc } from "@/lib/orpc/client";
+// import { authClient } from "@/server/better-auth/client";
 import { Mail, Password } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 const LoginPage = () => {
+  // const res = orpc.auth.signInSocial.call();
+  //
+  //
+  //
+  //
+
+  function handleGoogleLogin() {
+    const res = orpc.auth.signInSocial.call();
+  }
+
   return (
     <div className="relative min-h-svh overflow-clip">
       <div className="relative mx-auto max-w-7xl">
@@ -68,7 +81,11 @@ const LoginPage = () => {
                     </span>
                     <div className="bg-border h-px w-1/2 dark:bg-neutral-700"></div>
                   </div>{" "}
-                  <Button variant={"secondary"} className={"w-full"}>
+                  <Button
+                    variant={"secondary"}
+                    className={"w-full"}
+                    onClick={() => handleGoogleLogin()}
+                  >
                     <Google />
                     Continue with Google
                   </Button>
