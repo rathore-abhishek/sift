@@ -8,7 +8,7 @@ export const GoogleLoginButton: React.FC = () => {
 
   function handleGoogleLogin() {
     start();
-    authClient.signIn.social({ provider: "google" });
+    authClient.signIn.social({ provider: "google", callbackURL: "/dashboard" });
   }
 
   return (

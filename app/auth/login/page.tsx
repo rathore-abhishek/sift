@@ -2,9 +2,10 @@
 import { useState } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
-import { LoginInput, loginSchema } from "./validation";
+import { orpc } from "@/client/orpc";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
 import Scale from "@/components/scale";
@@ -15,21 +16,36 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { Loader } from "@/components/ui/loader";
+import { LoginInput, loginSchema } from "@/validation/auth";
 import { Eye, Mail, Password, EyeOff } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 
 const LoginPage = () => {
-  const [show, setShow] = useState();
+  const [show, setShow] = useState<boolean>(false);
   const form = useForm({
     defaultValues: { email: "", password: "" } as LoginInput,
     validators: {
       onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value);
+      mutate({ email: value.email, password: value.password });
     },
   });
+  const { replace } = useRouter();
+
+  const { isPending, mutate } = useMutation(
+    orpc.auth.signIn.mutationOptions({
+      onError: (error) => {
+        console.error(error);
+      },
+      onSuccess: () => {
+        replace("/dashboard");
+      },
+    })
+  );
 
   return (
     <div className="relative min-h-svh overflow-clip">
@@ -75,6 +91,7 @@ const LoginPage = () => {
                           </InputGroupAddon>
                           <InputGroupInput
                             placeholder="Email"
+                            disabled={isPending}
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
@@ -108,6 +125,7 @@ const LoginPage = () => {
                           <InputGroupInput
                             placeholder="Password"
                             type="password"
+                            disabled={isPending}
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
@@ -124,8 +142,10 @@ const LoginPage = () => {
 
                   <Button
                     className="w-full"
+                    disabled={isPending}
                     onClick={() => form.handleSubmit()}
                   >
+                    {isPending && <Loader />}
                     Login
                   </Button>
 

@@ -14,6 +14,9 @@ const envSchema = z.object({
 
   // Node Environment (optional, defaults to development)
   NODE_ENV: z.enum(["development", "production", "test"]).optional(),
+
+  SMTP_USER: z.email(),
+  SMTP_PASS: z.string(),
 });
 
 const parsed = envSchema.safeParse(process.env);

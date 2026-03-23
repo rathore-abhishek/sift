@@ -5,7 +5,9 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
-import { SignupInput, signupSchema } from "./validation";
+import { VerifyEmail } from "./_components/verify-email";
+import { authClient } from "@/client/better-auth";
+import { orpc } from "@/client/orpc";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
 import Scale from "@/components/scale";
@@ -15,6 +17,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { Loader } from "@/components/ui/loader";
+import { SignupInput, signupSchema } from "@/validation/auth";
 import {
   Mail,
   Password,
@@ -22,11 +26,12 @@ import {
   Eye,
   EyeOff,
   Tick,
+  MailOpen,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 
-// password rule definitions
 const passwordRules = [
   { label: "Min 8 characters", test: (v: string) => v.length >= 8 },
   {
@@ -44,16 +49,33 @@ const passwordRules = [
   },
 ];
 
+// ── Main page ────────────────────────────────────────────────────────────────
 const SignUpPage = () => {
   const [show, setShow] = useState(false);
+  const [verifyEmail, setVerifyEmail] = useState<string | null>(null);
 
   const form = useForm({
     defaultValues: { name: "", email: "", password: "" } as SignupInput,
     validators: { onSubmit: signupSchema },
     onSubmit: async ({ value }) => {
-      console.log(value);
+      mutate({
+        name: value.name,
+        email: value.email,
+        password: value.password,
+      });
     },
   });
+
+  const { isPending, mutate } = useMutation(
+    orpc.auth.signUp.mutationOptions({
+      onSuccess: () => {
+        setVerifyEmail(form.getFieldValue("email"));
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    })
+  );
 
   return (
     <div className="relative min-h-svh overflow-clip">
@@ -82,148 +104,165 @@ const SignUpPage = () => {
                 <Folder />
               </div>
               <div className="w-full rounded-xl sm:w-1/2">
-                <div className="text-center">
-                  <h2 className="text-muted-foreground text-xl">
-                    Get started!
-                  </h2>
-                  <p className="text-2xl">Create your account.</p>
-                </div>
-                <div className="mt-4 w-full space-y-3">
-                  {/* Name Field */}
-                  <form.Field name="name">
-                    {(field) => (
-                      <div>
-                        <InputGroup>
-                          <InputGroupAddon align="inline-start">
-                            <HugeiconsIcon icon={User} />
-                          </InputGroupAddon>
-                          <InputGroupInput
-                            placeholder="Name"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            onBlur={field.handleBlur}
-                          />
-                        </InputGroup>
-                        {field.state.meta.isTouched &&
-                          field.state.meta.errors[0] && (
-                            <p className="text-destructive mt-1 text-sm">
-                              {field.state.meta.errors[0].message}
-                            </p>
-                          )}
-                      </div>
-                    )}
-                  </form.Field>
+                {/* ── swap between form and verify screen ── */}
 
-                  {/* Email Field */}
-                  <form.Field name="email">
-                    {(field) => (
-                      <div>
-                        <InputGroup>
-                          <InputGroupAddon align="inline-start">
-                            <HugeiconsIcon icon={Mail} />
-                          </InputGroupAddon>
-                          <InputGroupInput
-                            placeholder="Email"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            onBlur={field.handleBlur}
-                          />
-                        </InputGroup>
-                        {field.state.meta.isTouched &&
-                          field.state.meta.errors[0] && (
-                            <p className="text-destructive mt-1 text-sm">
-                              {field.state.meta.errors[0].message}
-                            </p>
-                          )}
-                      </div>
-                    )}
-                  </form.Field>
-
-                  {/* Password Field */}
-                  <form.Field name="password">
-                    {(field) => (
-                      <div>
-                        <InputGroup>
-                          <InputGroupAddon align="inline-start">
-                            <HugeiconsIcon icon={Password} />
-                          </InputGroupAddon>
-                          <InputGroupAddon
-                            className="cursor-pointer transition-colors duration-200 hover:text-white"
-                            align="inline-end"
-                            onClick={() => setShow(!show)}
-                          >
-                            <HugeiconsIcon icon={show ? Eye : EyeOff} />
-                          </InputGroupAddon>
-                          <InputGroupInput
-                            placeholder="Password"
-                            type={show ? "text" : "password"}
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            onBlur={field.handleBlur}
-                          />
-                        </InputGroup>
-
-                        {/* Password rule indicators */}
-                        <ul className="mt-2 flex flex-col gap-0.5">
-                          {passwordRules.map((rule) => {
-                            const passed = rule.test(field.state.value);
-                            return (
-                              <li
-                                key={rule.label}
-                                className="flex w-full items-center justify-between"
-                              >
-                                <p
-                                  className={`text-xs transition-colors duration-200 ${
-                                    !passed && field.state.meta.isTouched
-                                      ? "text-destructive"
-                                      : "text-muted-foreground"
-                                  }`}
-                                >
-                                  {rule.label}
+                {verifyEmail ? (
+                  <VerifyEmail email={verifyEmail} />
+                ) : (
+                  <>
+                    <div className="text-center">
+                      <h2 className="text-muted-foreground text-xl">
+                        Get started!
+                      </h2>
+                      <p className="text-2xl">Create your account.</p>
+                    </div>
+                    <div className="mt-4 w-full space-y-3">
+                      {/* Name */}
+                      <form.Field name="name">
+                        {(field) => (
+                          <div>
+                            <InputGroup>
+                              <InputGroupAddon align="inline-start">
+                                <HugeiconsIcon icon={User} />
+                              </InputGroupAddon>
+                              <InputGroupInput
+                                placeholder="Name"
+                                disabled={isPending}
+                                value={field.state.value}
+                                onChange={(e) =>
+                                  field.handleChange(e.target.value)
+                                }
+                                onBlur={field.handleBlur}
+                              />
+                            </InputGroup>
+                            {field.state.meta.isTouched &&
+                              field.state.meta.errors[0] && (
+                                <p className="text-destructive mt-1 text-sm">
+                                  {field.state.meta.errors[0].message}
                                 </p>
-                                <HugeiconsIcon
-                                  icon={Tick}
-                                  className={`size-4 transition-colors duration-200 ${
-                                    passed
-                                      ? "text-lime-500"
-                                      : "text-muted-foreground"
-                                  }`}
-                                />
-                              </li>
-                            );
-                          })}
-                        </ul>
+                              )}
+                          </div>
+                        )}
+                      </form.Field>
+
+                      {/* Email */}
+                      <form.Field name="email">
+                        {(field) => (
+                          <div>
+                            <InputGroup>
+                              <InputGroupAddon align="inline-start">
+                                <HugeiconsIcon icon={Mail} />
+                              </InputGroupAddon>
+                              <InputGroupInput
+                                placeholder="Email"
+                                disabled={isPending}
+                                value={field.state.value}
+                                onChange={(e) =>
+                                  field.handleChange(e.target.value)
+                                }
+                                onBlur={field.handleBlur}
+                              />
+                            </InputGroup>
+                            {field.state.meta.isTouched &&
+                              field.state.meta.errors[0] && (
+                                <p className="text-destructive mt-1 text-sm">
+                                  {field.state.meta.errors[0].message}
+                                </p>
+                              )}
+                          </div>
+                        )}
+                      </form.Field>
+
+                      {/* Password */}
+                      <form.Field name="password">
+                        {(field) => (
+                          <div>
+                            <InputGroup>
+                              <InputGroupAddon align="inline-start">
+                                <HugeiconsIcon icon={Password} />
+                              </InputGroupAddon>
+                              <InputGroupAddon
+                                className="cursor-pointer transition-colors duration-200 hover:text-white"
+                                align="inline-end"
+                                onClick={() => setShow(!show)}
+                              >
+                                <HugeiconsIcon icon={show ? Eye : EyeOff} />
+                              </InputGroupAddon>
+                              <InputGroupInput
+                                placeholder="Password"
+                                disabled={isPending}
+                                type={show ? "text" : "password"}
+                                value={field.state.value}
+                                onChange={(e) =>
+                                  field.handleChange(e.target.value)
+                                }
+                                onBlur={field.handleBlur}
+                              />
+                            </InputGroup>
+                            <ul className="mt-2 flex flex-col gap-0.5">
+                              {passwordRules.map((rule) => {
+                                const passed = rule.test(field.state.value);
+                                return (
+                                  <li
+                                    key={rule.label}
+                                    className="flex w-full items-center justify-between"
+                                  >
+                                    <p
+                                      className={`text-xs transition-colors duration-200 ${
+                                        !passed && field.state.meta.isTouched
+                                          ? "text-destructive"
+                                          : "text-muted-foreground"
+                                      }`}
+                                    >
+                                      {rule.label}
+                                    </p>
+                                    <HugeiconsIcon
+                                      icon={Tick}
+                                      className={`size-4 transition-colors duration-200 ${
+                                        passed
+                                          ? "text-lime-500"
+                                          : "text-muted-foreground"
+                                      }`}
+                                    />
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        )}
+                      </form.Field>
+
+                      <Button
+                        className="w-full"
+                        disabled={isPending}
+                        onClick={() => form.handleSubmit()}
+                      >
+                        {isPending && <Loader />}
+                        Sign Up
+                      </Button>
+
+                      <div className="flex items-center">
+                        <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
+                        <span className="text-muted-foreground px-2 text-xs">
+                          OR
+                        </span>
+                        <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
                       </div>
-                    )}
-                  </form.Field>
 
-                  <Button
-                    className="w-full"
-                    onClick={() => form.handleSubmit()}
-                  >
-                    Sign Up
-                  </Button>
+                      <GoogleLoginButton />
 
-                  <div className="flex items-center">
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
-                    <span className="text-muted-foreground px-2 text-xs">
-                      OR
-                    </span>
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
-                  </div>
-
-                  <GoogleLoginButton />
-
-                  <p className="text-muted-foreground text-center text-sm">
-                    Already have an account?{" "}
-                    <Link
-                      href="/auth/login"
-                      className="text-primary hover:underline"
-                    >
-                      Login
-                    </Link>
-                  </p>
-                </div>
+                      <p className="text-muted-foreground text-center text-sm">
+                        Already have an account?{" "}
+                        <Link
+                          href="/auth/login"
+                          className="text-primary hover:underline"
+                        >
+                          Login
+                        </Link>
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
