@@ -1,11 +1,12 @@
-// Your Better Auth instance
-import { auth } from "@/server/better-auth/config";
+import { headers } from "next/headers";
+
+import { auth } from "@/server/better-auth";
 import { base } from "@/server/procedures/base";
 import { ORPCError } from "@orpc/server";
 
 export const authMiddleware = base.middleware(async ({ context, next }) => {
   const sessionData = await auth.api.getSession({
-    headers: context.headers, // or reqHeaders if you're using the plugin
+    headers: await headers(), // or reqHeaders if you're using the plugin
   });
 
   if (!sessionData?.session || !sessionData?.user) {

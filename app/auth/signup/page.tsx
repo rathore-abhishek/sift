@@ -7,7 +7,6 @@ import Link from "next/link";
 import { GoogleLoginButton } from "../_components/google-login-button";
 import { VerifyEmail } from "./_components/verify-email";
 import { authClient } from "@/client/better-auth";
-import { orpc } from "@/client/orpc";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
 import Scale from "@/components/scale";
@@ -18,6 +17,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Loader } from "@/components/ui/loader";
+import { auth } from "@/server/better-auth";
 import { SignupInput, signupSchema } from "@/validation/auth";
 import {
   Mail,
@@ -59,23 +59,31 @@ const SignUpPage = () => {
     validators: { onSubmit: signupSchema },
     onSubmit: async ({ value }) => {
       mutate({
-        name: value.name,
         email: value.email,
         password: value.password,
+        name: value.password,
       });
     },
   });
 
-  const { isPending, mutate } = useMutation(
-    orpc.auth.signUp.mutationOptions({
-      onSuccess: () => {
-        setVerifyEmail(form.getFieldValue("email"));
-      },
-      onError: (error) => {
-        console.error(error);
-      },
-    })
-  );
+  const { isPending, mutate } = useMutation({
+    mutationFn: async ({
+      name,
+      email,
+      password,
+    }: {
+      name: string;
+      email: string;
+      password: string;
+    }) => {
+      await authClient.signUp.email({
+        name,
+        email,
+        password,
+        callbackURL: "/dashboard",
+      });
+    },
+  });
 
   return (
     <div className="relative min-h-svh overflow-clip">

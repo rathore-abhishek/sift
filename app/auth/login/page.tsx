@@ -2,10 +2,9 @@
 import { useState } from "react";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
-import { orpc } from "@/client/orpc";
+import { authClient } from "@/client/better-auth";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
 import Scale from "@/components/scale";
@@ -33,18 +32,22 @@ const LoginPage = () => {
       mutate({ email: value.email, password: value.password });
     },
   });
-  const { replace } = useRouter();
 
-  const { isPending, mutate } = useMutation(
-    orpc.auth.signIn.mutationOptions({
-      onError: (error) => {
-        console.error(error);
-      },
-      onSuccess: () => {
-        replace("/dashboard");
-      },
-    })
-  );
+  const { isPending, mutate } = useMutation({
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string;
+      password: string;
+    }) => {
+      await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: "/dashboard",
+      });
+    },
+  });
 
   return (
     <div className="relative min-h-svh overflow-clip">

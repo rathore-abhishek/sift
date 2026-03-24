@@ -5,6 +5,7 @@ import "./globals.css";
 import { BProgressProvider } from "@/components/providers/bprogress-provider";
 import { TanstackQueryProvider } from "@/components/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 const instrumentSerif = Instrument_Serif({
@@ -54,6 +55,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <BProgressProvider>{children}</BProgressProvider>
+            <Toaster />
           </ThemeProvider>
         </TanstackQueryProvider>
       </body>
