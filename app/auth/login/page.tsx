@@ -20,6 +20,7 @@ import { Eye, Mail, Password, EyeOff } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const LoginPage = () => {
   const [show, setShow] = useState<boolean>(false);
@@ -41,11 +42,18 @@ const LoginPage = () => {
       email: string;
       password: string;
     }) => {
-      await authClient.signIn.email({
+      const { error } = await authClient.signIn.email({
         email,
         password,
         callbackURL: "/dashboard",
       });
+
+      if (error) {
+        throw error;
+      }
+    },
+    onError: ({ message }) => {
+      toast.error(message);
     },
   });
 

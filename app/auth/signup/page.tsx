@@ -29,6 +29,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const passwordRules = [
   { label: "Min 8 characters", test: (v: string) => v.length >= 8 },
@@ -74,12 +75,18 @@ const SignUpPage = () => {
       email: string;
       password: string;
     }) => {
-      await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         name,
         email,
         password,
         callbackURL: "/dashboard",
       });
+      if (error) {
+        throw error;
+      }
+    },
+    onError: ({ message }) => {
+      toast.error(message);
     },
   });
 
