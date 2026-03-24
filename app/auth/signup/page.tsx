@@ -16,8 +16,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Loader } from "@/components/ui/loader";
-import { auth } from "@/server/better-auth";
+import { Spinner } from "@/components/ui/spinner";
 import { SignupInput, signupSchema } from "@/validation/auth";
 import {
   Mail,
@@ -26,7 +25,6 @@ import {
   Eye,
   EyeOff,
   Tick,
-  MailOpen,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useForm } from "@tanstack/react-form";
@@ -245,7 +243,7 @@ const SignUpPage = () => {
                         disabled={isPending}
                         onClick={() => form.handleSubmit()}
                       >
-                        {isPending && <Loader />}
+                        {isPending && <Spinner />}
                         Sign Up
                       </Button>
 

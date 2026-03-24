@@ -14,7 +14,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Loader } from "@/components/ui/loader";
+import { Spinner } from "@/components/ui/spinner";
 import { LoginInput, loginSchema } from "@/validation/auth";
 import { Eye, Mail, Password, EyeOff } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -147,7 +147,7 @@ const LoginPage = () => {
                     disabled={isPending}
                     onClick={() => form.handleSubmit()}
                   >
-                    {isPending && <Loader />}
+                    {isPending && <Spinner />}
                     Login
                   </Button>
 

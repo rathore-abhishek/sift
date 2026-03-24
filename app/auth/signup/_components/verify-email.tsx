@@ -10,7 +10,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Loader } from "@/components/ui/loader";
+import { Spinner } from "@/components/ui/spinner";
 import { MailOpen } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useMutation } from "@tanstack/react-query";
@@ -39,7 +39,7 @@ export const VerifyEmail = ({ email }: { email: string }) => {
           disabled={isPending}
           onClick={() => mutate({ email })}
         >
-          {isPending && <Loader />}
+          {isPending && <Spinner />}
           Resend verification email
         </Button>
         <p className="text-muted-foreground text-sm">
