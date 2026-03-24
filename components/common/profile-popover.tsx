@@ -2,6 +2,7 @@
 
 import { Skeleton } from "../ui/skeleton";
 import { Spinner } from "../ui/spinner";
+import { authClient } from "@/client/better-auth";
 import { orpc } from "@/client/orpc";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,9 +10,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useRouter } from "@bprogress/next";
 import { Logout, User } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "facehash";
 import { toast } from "sonner";
 
@@ -23,8 +25,24 @@ export const ProfilePopover = () => {
     error,
   } = useQuery(orpc.user.getUser.queryOptions({ queryKey: ["user-session"] }));
 
+  const { push } = useRouter();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      const { error } = await authClient.signOut();
+
+      if (error) {
+        throw error;
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: () => push("/auth/login"),
+  });
+
   if (isError) {
-    toast.error("Faild to load user");
+    toast.error(error.message);
     return (
       <Avatar className="size-9 rounded-full">
         <AvatarFallback
@@ -124,11 +142,13 @@ export const ProfilePopover = () => {
           <Button
             variant={"ghost"}
             size={"sm"}
+            disabled={isPending}
             className={
               "dark:hover:bg-destructive/10 dark:hover:text-destructive hover:bg-destructive/10 hover:text-destructive justify-start"
             }
+            onClick={() => mutate()}
           >
-            <HugeiconsIcon icon={Logout} /> Logout
+            {isPending ? <Spinner /> : <HugeiconsIcon icon={Logout} />} Logout
           </Button>
         </div>
       </PopoverContent>
