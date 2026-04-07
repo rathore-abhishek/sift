@@ -1,6 +1,8 @@
+"use client";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default async function Home() {
   return (
@@ -12,6 +14,7 @@ export default async function Home() {
       >
         Login Page
       </Button>
+      <Button onClick={() => toast("render toast")}>Render Toast</Button>
     </div>
   );
 }

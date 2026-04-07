@@ -15,6 +15,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 import { LoginInput, loginSchema } from "@/validation/auth";
 import { Eye, Mail, Password, EyeOff } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -126,9 +127,12 @@ const LoginPage = () => {
                           </InputGroupAddon>
 
                           <InputGroupAddon
-                            className="cursor-pointer transition-colors duration-200 hover:text-white"
+                            className={cn(
+                              "cursor-pointer transition-colors duration-200 hover:text-white",
+                              isPending && ""
+                            )}
                             align="inline-end"
-                            onClick={() => setShow(!show)}
+                            onClick={() => !isPending && setShow(!show)}
                           >
                             <HugeiconsIcon icon={show ? Eye : EyeOff} />
                           </InputGroupAddon>

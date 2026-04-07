@@ -18,7 +18,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps["theme"]}
-      className="toaster group bg-red-500"
+      className="toaster group"
       position="bottom-center"
       duration={100000}
       icons={{
@@ -26,21 +26,21 @@ const Toaster = ({ ...props }: ToasterProps) => {
           <HugeiconsIcon
             icon={CheckmarkCircle02Icon}
             strokeWidth={2}
-            className="size-4"
+            className="size-4 text-green-500"
           />
         ),
         info: (
           <HugeiconsIcon
             icon={InformationCircleIcon}
             strokeWidth={2}
-            className="size-4"
+            className="size-4 text-blue-400"
           />
         ),
         warning: (
           <HugeiconsIcon
             icon={Alert02Icon}
             strokeWidth={2}
-            className="size-4"
+            className="size-4 text-amber-400"
           />
         ),
         error: (
@@ -58,20 +58,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
           />
         ),
       }}
-      // style={
-      //   {
-      //     "--normal-bg":
-      //       theme === "dark"
-      //         ? "color-mix(in srgb, var(--bg-secondary) 40%)"
-      //         : "color-mix(in srgb, var(--bg-secondary) 10%, transparent)",
-      //     "--normal-text": "var(--popover-foreground)",
-      //     "--normal-border": "var(--border)",
-      //     "--border-radius": "var(--radius)",
-      //   } as React.CSSProperties
-      // }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          toast: "!bg-muted !ring !ring-border border-0",
         },
       }}
       {...props}

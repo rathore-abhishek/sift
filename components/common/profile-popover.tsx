@@ -1,6 +1,5 @@
 "use client";
 
-import { Skeleton } from "../ui/skeleton";
 import { Spinner } from "../ui/spinner";
 import { authClient } from "@/client/better-auth";
 import { orpc } from "@/client/orpc";
@@ -47,6 +46,7 @@ export const ProfilePopover = () => {
       <Avatar className="size-9 rounded-full">
         <AvatarFallback
           facehash={true}
+          className="text-white"
           facehashProps={{
             colors: [
               "var(--color-teal-400)",
@@ -70,6 +70,7 @@ export const ProfilePopover = () => {
           <Avatar className="size-9 rounded-full">
             <AvatarFallback
               facehash={true}
+              className="text-white"
               facehashProps={{
                 colors: [
                   "var(--color-teal-400)",
@@ -86,10 +87,11 @@ export const ProfilePopover = () => {
             />
           </Avatar>
         ) : (
-          <Avatar className="size-9 rounded-full">
+          <Avatar className="bg-secondary/20 dark:bg-secondary size-9 rounded-full">
             <AvatarFallback
               name={user?.name}
               facehash={true}
+              className="text-white"
               facehashProps={{
                 colors: [
                   "var(--color-teal-400)",
@@ -109,10 +111,11 @@ export const ProfilePopover = () => {
         align="end"
       >
         <div className="bg-secondary/10 dark:bg-secondary flex flex-row items-center gap-2 rounded-b-xl p-5">
-          <Avatar className="size-10 rounded-full">
+          <Avatar className="bg-muted size-10 rounded-full">
             <AvatarFallback
-              name="Abhishek"
+              name={user?.name}
               facehash={true}
+              className="text-white"
               facehashProps={{
                 colors: [
                   "var(--color-teal-400)",
@@ -120,7 +123,6 @@ export const ProfilePopover = () => {
                   "var(--color-sky-400)",
                   "var(--color-blue-400)",
                   "var(--color-indigo-400)",
-                  "var(--color-rose-400)",
                 ],
               }}
             />
