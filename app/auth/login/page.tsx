@@ -128,7 +128,7 @@ const LoginPage = () => {
 
                           <InputGroupAddon
                             className={cn(
-                              "cursor-pointer transition-colors duration-200 hover:text-white",
+                              "hover:text-foreground cursor-pointer transition-colors duration-200",
                               isPending && ""
                             )}
                             align="inline-end"

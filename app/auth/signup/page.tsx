@@ -59,8 +59,8 @@ const SignUpPage = () => {
     onSubmit: async ({ value }) => {
       mutate({
         email: value.email,
+        name: value.name,
         password: value.password,
-        name: value.password,
       });
     },
   });
@@ -84,6 +84,9 @@ const SignUpPage = () => {
       if (error) {
         throw error;
       }
+    },
+    onSuccess: () => {
+      setVerifyEmail(form.getFieldValue("email"));
     },
     onError: ({ message }) => {
       toast.error(message);
@@ -195,7 +198,7 @@ const SignUpPage = () => {
                                 <HugeiconsIcon icon={Password} />
                               </InputGroupAddon>
                               <InputGroupAddon
-                                className="cursor-pointer transition-colors duration-200 hover:text-white"
+                                className="hover:text-foreground cursor-pointer transition-colors duration-200"
                                 align="inline-end"
                                 onClick={() => setShow(!show)}
                               >

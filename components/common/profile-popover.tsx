@@ -22,7 +22,13 @@ export const ProfilePopover = () => {
     isLoading,
     isError,
     error,
-  } = useQuery(orpc.user.getUser.queryOptions({ queryKey: ["user-session"] }));
+  } = useQuery({
+    queryKey: ["user-data"],
+    queryFn: async () => {
+      const session = await authClient.getSession();
+      return session.data?.user;
+    },
+  });
 
   const { push } = useRouter();
 
