@@ -36,7 +36,6 @@ export const auth = betterAuth({
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
-      console.log(ctx.body);
       if (ctx.path === "/sign-in/email") {
         const result = loginSchema.safeParse(ctx.body);
 

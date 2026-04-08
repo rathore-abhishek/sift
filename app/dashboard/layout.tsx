@@ -14,7 +14,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
 
   if (!session?.user) return redirect("/auth/login");
 
-  return children;
+  return (
+    <>
+      {children}
+      <div id="dialog"></div>
+    </>
+  );
 };
 
 export default DashboardLayout;
