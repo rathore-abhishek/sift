@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
+import { VerifyEmail } from "../_components/verify-email";
 import { authClient } from "@/client/better-auth";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
@@ -25,6 +26,8 @@ import { toast } from "sonner";
 
 const LoginPage = () => {
   const [show, setShow] = useState<boolean>(false);
+  const [verifyEmail, setVerifyEmail] = useState<string | null>(null);
+
   const form = useForm({
     defaultValues: { email: "", password: "" } as LoginInput,
     validators: {
@@ -49,12 +52,15 @@ const LoginPage = () => {
         callbackURL: "/dashboard",
       });
 
-      if (error) {
+      if (error?.status === 403) {
+        setVerifyEmail(email);
+        throw error;
+      } else {
         throw error;
       }
     },
     onError: ({ message }) => {
-      toast.error(message);
+      toast.error(message ?? "Something went wrong!!");
     },
   });
 
@@ -85,104 +91,114 @@ const LoginPage = () => {
                 <Folder />
               </div>
               <div className="w-full rounded-xl sm:w-1/2">
-                <div className="text-center">
-                  <h2 className="text-muted-foreground text-xl">
-                    Welcome back!
-                  </h2>
-                  <p className="text-2xl">Login to your account.</p>
-                </div>
-                <div className="mt-4 w-full space-y-3">
-                  {/* Email Field */}
-                  <form.Field name="email">
-                    {(field) => (
-                      <div>
-                        <InputGroup>
-                          <InputGroupAddon align="inline-start">
-                            <HugeiconsIcon icon={Mail} />
-                          </InputGroupAddon>
-                          <InputGroupInput
-                            placeholder="Email"
-                            disabled={isPending}
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            onBlur={field.handleBlur}
-                          />
-                        </InputGroup>
-                        {field.state.meta.errors[0] && (
-                          <p className="text-destructive mt-1 text-sm">
-                            {field.state.meta.errors[0].message}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </form.Field>
-
-                  {/* Password Field */}
-                  <form.Field name="password">
-                    {(field) => (
-                      <div>
-                        <InputGroup>
-                          <InputGroupAddon align="inline-start">
-                            <HugeiconsIcon icon={Password} />
-                          </InputGroupAddon>
-
-                          <InputGroupAddon
-                            className={cn(
-                              "hover:text-foreground cursor-pointer transition-colors duration-200",
-                              isPending && ""
+                {verifyEmail ? (
+                  <VerifyEmail email={verifyEmail} />
+                ) : (
+                  <>
+                    <div className="text-center">
+                      <h2 className="text-muted-foreground text-xl">
+                        Welcome back!
+                      </h2>
+                      <p className="text-2xl">Login to your account.</p>
+                    </div>
+                    <div className="mt-4 w-full space-y-3">
+                      {/* Email Field */}
+                      <form.Field name="email">
+                        {(field) => (
+                          <div>
+                            <InputGroup>
+                              <InputGroupAddon align="inline-start">
+                                <HugeiconsIcon icon={Mail} />
+                              </InputGroupAddon>
+                              <InputGroupInput
+                                placeholder="Email"
+                                disabled={isPending}
+                                value={field.state.value}
+                                onChange={(e) =>
+                                  field.handleChange(e.target.value)
+                                }
+                                onBlur={field.handleBlur}
+                              />
+                            </InputGroup>
+                            {field.state.meta.errors[0] && (
+                              <p className="text-destructive mt-1 text-sm">
+                                {field.state.meta.errors[0].message}
+                              </p>
                             )}
-                            align="inline-end"
-                            onClick={() => !isPending && setShow(!show)}
-                          >
-                            <HugeiconsIcon icon={show ? Eye : EyeOff} />
-                          </InputGroupAddon>
-                          <InputGroupInput
-                            placeholder="Password"
-                            type="password"
-                            disabled={isPending}
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            onBlur={field.handleBlur}
-                          />
-                        </InputGroup>
-                        {field.state.meta.errors[0] && (
-                          <p className="text-destructive mt-1 text-sm">
-                            {field.state.meta.errors[0].message}
-                          </p>
+                          </div>
                         )}
+                      </form.Field>
+
+                      {/* Password Field */}
+                      <form.Field name="password">
+                        {(field) => (
+                          <div>
+                            <InputGroup>
+                              <InputGroupAddon align="inline-start">
+                                <HugeiconsIcon icon={Password} />
+                              </InputGroupAddon>
+
+                              <InputGroupAddon
+                                className={cn(
+                                  "hover:text-foreground cursor-pointer transition-colors duration-200",
+                                  isPending && ""
+                                )}
+                                align="inline-end"
+                                onClick={() => !isPending && setShow(!show)}
+                              >
+                                <HugeiconsIcon icon={show ? Eye : EyeOff} />
+                              </InputGroupAddon>
+                              <InputGroupInput
+                                placeholder="Password"
+                                type={show ? "text" : "password"}
+                                disabled={isPending}
+                                value={field.state.value}
+                                onChange={(e) =>
+                                  field.handleChange(e.target.value)
+                                }
+                                onBlur={field.handleBlur}
+                              />
+                            </InputGroup>
+                            {field.state.meta.errors[0] && (
+                              <p className="text-destructive mt-1 text-sm">
+                                {field.state.meta.errors[0].message}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </form.Field>
+
+                      <Button
+                        className="w-full"
+                        disabled={isPending}
+                        onClick={() => form.handleSubmit()}
+                      >
+                        {isPending && <Spinner />}
+                        Login
+                      </Button>
+
+                      <div className="flex items-center">
+                        <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
+                        <span className="text-muted-foreground px-2 text-xs">
+                          OR
+                        </span>
+                        <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
                       </div>
-                    )}
-                  </form.Field>
 
-                  <Button
-                    className="w-full"
-                    disabled={isPending}
-                    onClick={() => form.handleSubmit()}
-                  >
-                    {isPending && <Spinner />}
-                    Login
-                  </Button>
+                      <GoogleLoginButton />
 
-                  <div className="flex items-center">
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
-                    <span className="text-muted-foreground px-2 text-xs">
-                      OR
-                    </span>
-                    <div className="bg-border h-px w-1/2 dark:bg-neutral-700" />
-                  </div>
-
-                  <GoogleLoginButton />
-
-                  <p className="text-muted-foreground text-center text-sm">
-                    Don't have an account?{" "}
-                    <Link
-                      href="/auth/signup"
-                      className="text-primary hover:underline"
-                    >
-                      Sign Up
-                    </Link>
-                  </p>
-                </div>
+                      <p className="text-muted-foreground text-center text-sm">
+                        Don't have an account?{" "}
+                        <Link
+                          href="/auth/signup"
+                          className="text-primary hover:underline"
+                        >
+                          Sign Up
+                        </Link>
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

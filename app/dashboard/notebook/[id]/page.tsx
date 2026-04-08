@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Navbar } from "./_components/navbar";
-import Example from "@/components/file-upload-dropzone-1";
 import { Button } from "@/components/ui/button";
 import { FileUpload, FileUploadDropzone } from "@/components/ui/file-upload";
 import { Input } from "@/components/ui/input";
@@ -96,9 +95,7 @@ const NotebookPage = () => {
               />
             </button>
           </div>
-          <div className="mt-3 flex w-full items-center justify-center">
-            <Example />
-          </div>
+          <div className="mt-3 flex w-full items-center justify-center"></div>
         </motion.div>
 
         <motion.div

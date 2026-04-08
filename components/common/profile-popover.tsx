@@ -2,7 +2,6 @@
 
 import { Spinner } from "../ui/spinner";
 import { authClient } from "@/client/better-auth";
-import { orpc } from "@/client/orpc";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -12,23 +11,12 @@ import {
 import { useRouter } from "@bprogress/next";
 import { Logout, User } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "facehash";
 import { toast } from "sonner";
 
 export const ProfilePopover = () => {
-  const {
-    data: user,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["user-data"],
-    queryFn: async () => {
-      const session = await authClient.getSession();
-      return session.data?.user;
-    },
-  });
+  const { data, error, isPending: isLoading } = authClient.useSession();
 
   const { push } = useRouter();
 
@@ -46,7 +34,7 @@ export const ProfilePopover = () => {
     onSuccess: () => push("/auth/login"),
   });
 
-  if (isError) {
+  if (error) {
     toast.error(error.message);
     return (
       <Avatar className="size-9 rounded-full">
@@ -71,7 +59,7 @@ export const ProfilePopover = () => {
 
   return (
     <Popover>
-      <PopoverTrigger disabled={isLoading || isError}>
+      <PopoverTrigger disabled={isLoading || !!error}>
         {isLoading ? (
           <Avatar className="size-9 rounded-full">
             <AvatarFallback
@@ -95,7 +83,7 @@ export const ProfilePopover = () => {
         ) : (
           <Avatar className="bg-secondary/20 dark:bg-secondary size-9 rounded-full">
             <AvatarFallback
-              name={user?.name}
+              name={data?.user?.name}
               facehash={true}
               className="text-white"
               facehashProps={{
@@ -108,7 +96,7 @@ export const ProfilePopover = () => {
                 ],
               }}
             />
-            <AvatarImage src={user?.image} className="bg-muted" />
+            <AvatarImage src={data?.user?.image} className="bg-muted" />
           </Avatar>
         )}
       </PopoverTrigger>
@@ -119,7 +107,7 @@ export const ProfilePopover = () => {
         <div className="bg-secondary/10 dark:bg-secondary flex flex-row items-center gap-2 rounded-b-xl p-5">
           <Avatar className="bg-muted size-10 rounded-full">
             <AvatarFallback
-              name={user?.name}
+              name={data?.user?.name}
               facehash={true}
               className="text-white"
               facehashProps={{
@@ -132,11 +120,13 @@ export const ProfilePopover = () => {
                 ],
               }}
             />
-            <AvatarImage src={user?.image} className="bg-muted" />
+            <AvatarImage src={data?.user?.image} className="bg-muted" />
           </Avatar>
           <div>
-            <p className="font-medium">{user?.name}</p>
-            <p className="text-muted-foreground font-medium">{user?.email}</p>
+            <p className="font-medium">{data?.user?.name}</p>
+            <p className="text-muted-foreground font-medium">
+              {data?.user?.email}
+            </p>
           </div>
         </div>
         <div className="flex w-full flex-col px-2 pb-3">

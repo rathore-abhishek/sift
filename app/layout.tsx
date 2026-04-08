@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 
 import "./globals.css";
+import { authClient } from "@/client/better-auth";
 import { BProgressProvider } from "@/components/providers/bprogress-provider";
 import { TanstackQueryProvider } from "@/components/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -34,6 +35,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  authClient.getSession();
+
   return (
     <html
       lang="en"

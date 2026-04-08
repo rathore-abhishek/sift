@@ -34,7 +34,3 @@ export const signupSchema = z.object({
 });
 
 export type SignupInput = z.infer<typeof signupSchema>;
-
-export const emailVerificationSchema = z.object({
-  email: z.email("Invalid email address"),
-});

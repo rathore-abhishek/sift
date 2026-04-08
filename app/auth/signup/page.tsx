@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { GoogleLoginButton } from "../_components/google-login-button";
-import { VerifyEmail } from "./_components/verify-email";
+import { VerifyEmail } from "../_components/verify-email";
 import { authClient } from "@/client/better-auth";
 import Folder from "@/components/folder";
 import { Logo } from "@/components/logos/logo";
@@ -89,7 +89,7 @@ const SignUpPage = () => {
       setVerifyEmail(form.getFieldValue("email"));
     },
     onError: ({ message }) => {
-      toast.error(message);
+      toast.error(message ?? "Something went wrong!!");
     },
   });
 

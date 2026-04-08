@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { orpc } from "@/client/orpc";
+import { authClient } from "@/client/better-auth";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -16,9 +16,14 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useMutation } from "@tanstack/react-query";
 
 export const VerifyEmail = ({ email }: { email: string }) => {
-  const { isPending, mutate } = useMutation(
-    orpc.auth.sendVerificationEmail.mutationOptions()
-  );
+  const { isPending, mutate } = useMutation({
+    mutationFn: async () => {
+      await authClient.sendVerificationEmail({
+        email,
+        callbackURL: "/dashboard",
+      });
+    },
+  });
 
   return (
     <Empty>
@@ -37,7 +42,7 @@ export const VerifyEmail = ({ email }: { email: string }) => {
           className="w-full"
           variant="secondary"
           disabled={isPending}
-          onClick={() => mutate({ email })}
+          onClick={() => mutate}
         >
           {isPending && <Spinner />}
           Resend verification email
