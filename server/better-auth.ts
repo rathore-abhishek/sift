@@ -39,8 +39,6 @@ export const auth = betterAuth({
       if (ctx.path === "/sign-in/email") {
         const result = loginSchema.safeParse(ctx.body);
 
-        console.log(result);
-
         if (!result.success) {
           throw new APIError("BAD_REQUEST", {
             message: result.error.issues[0].message ?? "Invalid input",
