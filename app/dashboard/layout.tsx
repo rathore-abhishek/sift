@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { Navbar } from "./_components/navbar";
 import { auth } from "@/server/better-auth";
 
 interface DashboardLayoutProps {
@@ -16,6 +17,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
 
   return (
     <>
+      <Navbar />
       {children}
       <div id="dialog"></div>
     </>

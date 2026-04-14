@@ -64,7 +64,6 @@ const DashboardPage = () => {
 
   return (
     <div className="flex min-h-svh flex-col">
-      <Navbar />
       <div className="bg-secondary/20 dark:bg-secondary mx-auto flex w-full max-w-7xl flex-1 border-x">
         <div className="bg-card flex w-full flex-1 flex-col rounded-xl p-5">
           <Toolbar view={view} setView={setView} />
