@@ -2,117 +2,55 @@
 
 import { useState } from "react";
 
+import Image from "next/image";
+
 import { Footer } from "./_components/footer";
 import { Navbar } from "./_components/navbar";
-import {
-  NewNotebookListCard,
-  NewNoteBookNormalCard,
-} from "./_components/new-notebook-cards";
-import {
-  NotebookFolderCard,
-  NotebookListRow,
-} from "./_components/notebook-folder-cards";
 import { Toolbar } from "./_components/toolbar";
 import { Button } from "@/components/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Plus, Search } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { toast } from "sonner";
 
-const notebooks = [
-  {
-    id: 1,
-    title: "Jaishankar Prasad: The Life and Poetry",
-    sources: 19,
-    updatedAt: "9 Jan 2026",
-    tabColor: "bg-violet-400",
-    backColor: "bg-secondary/60 dark:bg-secondary/40",
-  },
-  {
-    id: 2,
-    title: "Untitled notebook",
-    sources: 0,
-    updatedAt: "19 Mar 2026",
-    tabColor: "bg-sky-400",
-    backColor: "bg-secondary/60 dark:bg-secondary/40",
-  },
-  {
-    id: 3,
-    title: "Power Sharing: Lessons from Belgium",
-    sources: 26,
-    updatedAt: "21 Dec 2025",
-    tabColor: "bg-amber-400",
-    backColor: "bg-secondary/60 dark:bg-secondary/40",
-  },
-  {
-    id: 4,
-    title: "Untitled notebook",
-    sources: 0,
-    updatedAt: "3 Dec 2025",
-    tabColor: "bg-rose-400",
-    backColor: "bg-secondary/60 dark:bg-secondary/40",
-  },
-  {
-    id: 5,
-    title: "Biology: Cell Structure & Functions",
-    sources: 11,
-    updatedAt: "14 Feb 2026",
-    tabColor: "bg-emerald-400",
-    backColor: "bg-secondary/60 dark:bg-secondary/40",
-  },
-];
-
 const DashboardPage = () => {
-  const [view, setView] = useState<"grid" | "list">("grid");
-
   return (
     <>
       <div className="bg-secondary/20 dark:bg-secondary mx-auto flex w-full max-w-7xl flex-1 border-x">
         <div className="bg-card flex w-full flex-1 flex-col rounded-xl p-5">
-          <Toolbar view={view} setView={setView} />
-
-          {/* ── Content ── */}
-          {view === "grid" ? (
-            <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <NewNoteBookNormalCard />
-              {notebooks.map((nb) => (
-                <NotebookFolderCard key={nb.id} notebook={nb} />
-              ))}
-            </div>
-          ) : (
-            <div className="mt-6 flex flex-col gap-2">
-              <NewNotebookListCard />
-
-              {/* Table wrapper */}
-              <div className="border-border bg-accent/30 overflow-hidden rounded-xl border">
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-80">
-                    <thead>
-                      <tr className="border-border border-b">
-                        <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                          #
-                        </th>
-                        <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                          Name
-                        </th>
-                        <th className="text-muted-foreground hidden px-4 py-2 text-left text-xs font-medium md:table-cell">
-                          Last updated
-                        </th>
-                        <th className="text-muted-foreground hidden px-4 py-2 text-left text-xs font-medium sm:table-cell">
-                          Sources
-                        </th>
-                        <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {notebooks.map((nb) => (
-                        <NotebookListRow key={nb.id} notebook={nb} />
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+          <div className="flex w-full justify-between">
+            <h2 className="text-2xl font-medium">Notebooks</h2>
+            <InputGroup className="max-w-xs">
+              <InputGroupInput placeholder="Search..." />
+              <InputGroupAddon>
+                <HugeiconsIcon icon={Search} />
+              </InputGroupAddon>
+            </InputGroup>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+            <div className="group flex w-full cursor-pointer flex-col gap-1 rounded-lg pb-2 transition-all duration-200 hover:shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:hover:shadow-[0px_2px_3px_-1px_rgba(255,255,255,0.06),0px_1px_0px_0px_rgba(255,255,255,0.04),0px_0px_0px_1px_rgba(255,255,255,0.08)]">
+              <div className="rounded-xl transition-transform group-hover:scale-105">
+                <Image
+                  width={500}
+                  height={500}
+                  src="/book.png"
+                  alt="book"
+                  className="mb-2 aspect-[1/1.3] h-auto w-full rounded-xl"
+                />
+              </div>
+              <div className="transition-transform group-hover:translate-x-4">
+                <h3 className="text-lg font-medium">Untitled notebook</h3>
+                <p className="text-muted-foreground text-base">
+                  Robert Krinoski
+                </p>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>
