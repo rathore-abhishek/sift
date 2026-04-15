@@ -3,11 +3,14 @@ import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const notebook = pgTable("notebook", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   authorName: text("author_name").notNull(),
   pdfUrl: text("pdf_url").notNull(),
   coverImageUrl: text("cover_image_url"),
+  assistantVoice: text("assistant_voice").notNull(),
   userId: text("user_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
