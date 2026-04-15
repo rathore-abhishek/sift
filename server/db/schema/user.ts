@@ -1,4 +1,5 @@
 import { account, session } from "./auth";
+import { notebook } from "./notebook";
 import { relations, SQL, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -29,6 +30,7 @@ export const user = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  notebooks: many(notebook),
 }));
 
 export function lower(column: AnyPgColumn): SQL {

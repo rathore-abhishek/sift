@@ -27,6 +27,7 @@ export const Navbar: React.FC = () => {
               <Button
                 render={<Link href={"/dashboard"} />}
                 variant={"ghost"}
+                nativeButton={false}
                 className={cn(
                   "text-muted-foreground",
                   pathname === "/dashboard" &&
@@ -38,6 +39,7 @@ export const Navbar: React.FC = () => {
               <Button
                 render={<Link href={"/dashboard/notebook/new"} />}
                 variant={"ghost"}
+                nativeButton={false}
                 className={cn(
                   "text-muted-foreground",
                   pathname === "/dashboard/notebook/new" &&

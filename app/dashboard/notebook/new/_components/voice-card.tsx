@@ -19,7 +19,7 @@ export default function VoiceCard({
       className={cn(
         "flex cursor-pointer flex-col rounded-lg border p-3.5 transition-all",
         currentValue === id
-          ? "bg-muted dark:bg-secondary/50 border-primary/40"
+          ? "bg-muted dark:bg-secondary/50"
           : "hover:bg-muted/50"
       )}
     >

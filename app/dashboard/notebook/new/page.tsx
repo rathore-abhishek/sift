@@ -3,6 +3,7 @@
 import { CoverImageDropZone } from "./_components/cover-image-dropzone";
 import PdfDropZone from "./_components/pdf-dropzone";
 import VoiceCard from "./_components/voice-card";
+import { orpc } from "@/client/orpc";
 import { Button } from "@/components/ui/button";
 import {
   InputGroup,
@@ -15,11 +16,23 @@ import { newNotebookSchema } from "@/validation/notebook";
 import { Book03Icon, QuillWrite02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 const NewNotebookPage = () => {
+  const { isPending, mutate } = useMutation(
+    orpc.notebook.createNotebook.mutationOptions({
+      onSuccess: () => {
+        toast.success("Notebook created!");
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Failed to create notebook");
+      },
+    })
+  );
+
   const { startUpload: uploadPdf, isUploading: isPdfUploading } =
     useUploadThing("pdfUploader", {
       onUploadError: (err) => {
@@ -42,15 +55,9 @@ const NewNotebookPage = () => {
       pdfFile: null as File | null,
       coverImage: null as File | null,
     },
+
     validators: {
-      onSubmit: ({ value }) => {
-        const result = newNotebookSchema.safeParse(value);
-        if (!result.success) {
-          // Return first error as a string so TanStack Form surfaces it
-          return result.error.issues[0]?.message ?? "Validation failed";
-        }
-        return undefined;
-      },
+      onSubmit: newNotebookSchema,
     },
     onSubmit: async ({ value }) => {
       // Validate PDF presence
@@ -74,11 +81,16 @@ const NewNotebookPage = () => {
           coverUrl = coverRes?.[0]?.ufsUrl;
         }
 
-        toast.dismiss(toastId);
         toast.success("Notebook created!");
 
-        // TODO: call your API/mutation with { ...value, pdfUrl, coverUrl }
-        console.log({ ...value, pdfUrl, coverUrl });
+        mutate({
+          authorName: value.authorName,
+          pdfUrl,
+          title: value.title,
+          coverImageUrl: coverUrl,
+          assistantVoice: value.assistantVoice,
+        });
+        toast.dismiss(toastId);
       } catch (err: unknown) {
         toast.dismiss(toastId);
         toast.error(
@@ -89,7 +101,7 @@ const NewNotebookPage = () => {
   });
 
   const isSubmitting =
-    form.state.isSubmitting || isPdfUploading || isCoverUploading;
+    form.state.isSubmitting || isPdfUploading || isCoverUploading || isPending;
 
   return (
     <div className="bg-secondary/20 dark:bg-secondary mx-auto flex w-full max-w-7xl flex-1 border-x">

@@ -11,7 +11,9 @@ export const notebook = pgTable("notebook", {
   pdfUrl: text("pdf_url").notNull(),
   coverImageUrl: text("cover_image_url"),
   assistantVoice: text("assistant_voice").notNull(),
-  userId: text("user_id").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
