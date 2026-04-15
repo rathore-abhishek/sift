@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { Footer } from "./_components/footer";
 import { Navbar } from "./_components/navbar";
 import { auth } from "@/server/better-auth";
 
@@ -16,11 +17,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
   if (!session?.user) return redirect("/auth/login");
 
   return (
-    <>
+    <div className="flex min-h-svh flex-col">
       <Navbar />
       {children}
+      <Footer />
       <div id="dialog"></div>
-    </>
+    </div>
   );
 };
 

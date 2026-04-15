@@ -19,7 +19,9 @@ export const Navbar: React.FC = () => {
 
       <header className="bg-secondary/20 dark:bg-secondary mx-auto flex max-w-7xl items-center justify-between border-x">
         <div className="bg-background flex w-full items-center justify-between px-5 py-4">
-          <Logo />
+          <Link href={"/"}>
+            <Logo />
+          </Link>
           <div className="flex items-center gap-4">
             <nav className="flex items-center gap-1">
               <Button
